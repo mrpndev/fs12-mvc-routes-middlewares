@@ -7,6 +7,8 @@ const HOST = process.env.HOST || "127.0.0.1"
 
 const timestamp = require("./middlewares/timestamp")
 const routes = require("./routes/api.route")
+const keyroute = require("./routes/key.route")
+const verifyAPIKey = require("./middlewares/verifyAPIKey")
 
 /* 
 	? Middleware Chaining
@@ -19,8 +21,10 @@ app.use(express.json())
 // ? parses our incoming request JSON body
 app.use(timestamp)
 // ? used for binding middleware to use it
+app.use(keyroute)
 
-app.use(routes)
+// app.use(verifyAPIKey)
+app.use(verifyAPIKey, routes)
 
 app.listen(PORT, HOST, () => {
 	console.log(`[server] listening on ${HOST}:${PORT}`)

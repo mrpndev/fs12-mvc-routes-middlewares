@@ -38,6 +38,40 @@ router.get("/all", (req, res) => {
 });
 
 /* 
+	? Query Params
+	! not to be mistaken with params
+	* just like the query params on the client side
+	* we can pass key value pairs into our server
+	* great for filtering data
+*/
+
+let db = [
+	{ make: "BMW", model: "M2", year: 2025, mileage: 7000 },
+	{ make: "BMW", model: "M5", year: 2025, mileage: 1000 },
+	{ make: "Porsche", model: "911", year: 2022, mileage: 1000 },
+	{ make: "Audi", model: "RS5", year: 2023, mileage: 30000 },
+];
+
+router.get("/filter", (req, res) => {
+	let { make, model, year, mileage } = req.query;
+	console.log(req.headers.apikey)
+
+	mileage = Number(mileage)
+
+	const result = db.filter(
+		item =>
+			(make === undefined || item.make === make) &&
+			(model === undefined || item.model === model) &&
+			(year === undefined || item.year === year) &&
+			(mileage === undefined || item.mileage === mileage)
+	);
+
+	console.log(result);
+
+	res.status(200).json(result);
+});
+
+/* 
 	? POST endpoint
 	* used for creation or reading
 	* has headers
@@ -93,7 +127,7 @@ router.put("/:id", (req, res) => {
 
 	res.status(200).json({
 		message: `Hit ${req.method} ${req.url} endpoint`,
-		result
+		result,
 	});
 });
 
