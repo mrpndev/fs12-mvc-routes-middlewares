@@ -13,7 +13,7 @@
 */
 
 const router = require("express").Router();
-// invoking router interface
+// ? A Router groups related endpoints. app.js mounts this group after the API-key middleware.
 
 /* 
 	? GET endpoint
@@ -32,6 +32,8 @@ const router = require("express").Router();
 // })
 
 router.get("/all", (req, res) => {
+	// ? The callback is the route's controller logic for this small example.
+	// ? It runs only after verifyAPIKey has called next().
 	res.status(200).json({
 		message: `Hit ${req.method} ${req.url} endpoint`,
 	});
@@ -53,6 +55,7 @@ let db = [
 ];
 
 router.get("/filter", (req, res) => {
+	// ? Query-string values arrive on req.query, for example /filter?make=BMW.
 	let { make, model, year, mileage } = req.query;
 	console.log(req.headers.apikey)
 
@@ -80,6 +83,7 @@ router.get("/filter", (req, res) => {
 */
 
 router.post("/", (req, res) => {
+	// ? express.json() in app.js ran earlier, so the parsed payload is on req.body.
 	console.log(`The body of the request: `, req.body);
 
 	console.log(req.body.email);
@@ -119,7 +123,7 @@ router.post("/", (req, res) => {
 */
 
 router.put("/:id", (req, res) => {
-	// ? id becomes a variable in the world of endpoints
+	// ? /:id is a route parameter. Express puts its value on req.params.id.
 	console.log(req.params);
 	console.log(req.params.id);
 	let { id } = req.params;
@@ -140,10 +144,12 @@ router.put("/:id", (req, res) => {
 */
 
 router.delete("/delete", (req, res) => {
+	// ? This controller handles a DELETE request. In a full MVC app, the data
+	// ? deletion would usually be delegated to a model before sending the response.
 	res.status(200).json({
 		message: `Hit ${req.method} ${req.url} endpoint`,
 	});
 });
 
 module.exports = router;
-// exports the modified content of an object elsewhere
+// ? Exporting the router lets app.js mount these endpoints at the application level.

@@ -12,6 +12,7 @@
 */
 
 function timestamp(req, res, next) {
+	// ? Middleware can read and add properties to req before the route handler runs.
 	let date = new Date()
 	let timestamp = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`
 	
@@ -19,7 +20,7 @@ function timestamp(req, res, next) {
 	console.log(timestamp)
 
 	next()
-	// ? calls the next function in the call stack
+	// ? next() hands the request to the next middleware or route in the stack.
 }
 
 module.exports = timestamp
